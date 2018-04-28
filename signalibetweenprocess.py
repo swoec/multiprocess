@@ -15,8 +15,7 @@ class MyFancyClass(object):
 
     def do_something(self):
         proc_name = multiprocessing.current_process().name
-        print 'Doing something fancy in %s for %s!' % \
-            (proc_name, self.name)
+        print ('Doing something fancy in %s for %s!',(proc_name, self.name))
 
 def worker(q):
     obj = q.get()
@@ -51,10 +50,10 @@ class Consumer(multiprocessing.Process):
             next_task = self.task_queue.get()
             if next_task is None:
                 # Poison pill means shutdown
-                print '%s: Exiting' % proc_name
+                print('%s: Exiting' , proc_name)
                 self.task_queue.task_done()
                 break
-            print '%s: %s' % (proc_name, next_task)
+            print('%s: %s', (proc_name, next_task))
             answer = next_task()
             self.task_queue.task_done()
             self.result_queue.put(answer)
@@ -77,7 +76,7 @@ if __name__ == '__main__':
 
     # Start consumers
     num_consumers = multiprocessing.cpu_count() * 2
-    print 'Creating %d consumers' % num_consumers
+    print ('Creating %d consumers' , num_consumers)
     consumers = [ Consumer(tasks, results)
                   for i in xrange(num_consumers) ]
     for w in consumers:
@@ -98,5 +97,5 @@ if __name__ == '__main__':
     # Start printing results
     while num_jobs:
         result = results.get()
-        print 'Result:', result
+        print('Result:', result)
         num_jobs -= 1
